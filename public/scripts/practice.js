@@ -37,7 +37,4 @@ function play(eleccionJugador) {
     (document.getElementById("resultado")).textContent = resultado;
     (document.getElementById("victoriasJugador")).textContent = victoriasJugador.toString();
     (document.getElementById("victoriasPC")).textContent = victoriasPC.toString();
-    if (divResultado) {
-        divResultado.textContent = resultado;
-    }
 }
