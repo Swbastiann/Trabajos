@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego</title>
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+  <h1>¡¡Piedra, Papel, Tijera, Lagarto, Spock!!</h1>
+
+  <div id="buttons">
+    <button onclick="play('piedra')">Piedra</button>
+    <button onclick="play('papel')">Papel</button>
+    <button onclick="play('tijera')">Tijera</button>
+    <button onclick="play('lagarto')">Lagarto</button>
+    <button onclick="play('spock')">Spock</button>
+  </div>
+
+  <div id="resultados">
+    <p><strong>Jugador:</strong> <span id="jugador">---</span></p>
+    <p><strong>PC:</strong> <span id="pc">---</span></p>
+    <h2 id="resultado">Elige una opción...</h2>
+  </div>
+
+  <div id="marcador">
+    <h3>Marcador:</h3>
+    <p>Jugador: <span id="victoriasJugador">0</span></p>
+    <p>PC: <span id="victoriasPC">0</span></p>
+  </div>
+
+  <script src="./scripts/practice.js"></script>
+</body>
+</html>

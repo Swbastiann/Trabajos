@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./public/scripts",
+    "target": "ES2016",//Js version to copilate
+    "module": "CommonJS",
+    "strict":true,
+  }, 
+  "include": ["src"]
+}
