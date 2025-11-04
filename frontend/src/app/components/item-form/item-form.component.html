@@ -1,0 +1,67 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header" [class]="isEdit ? 'bg-warning text-dark' : 'bg-primary text-white'">
+          <h3 class="card-title mb-0">
+            <i class="fas" [class.fa-edit]="isEdit" [class.fa-plus-circle]="!isEdit" class="me-2"></i>
+            {{ isEdit ? 'Editar Producto' : 'Agregar Nuevo Producto' }}
+            <span class="badge bg-success ms-2">🤖 IA Integrada</span>
+          </h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre del Producto *</label>
+              <input type="text" class="form-control" id="nombre" 
+                     [(ngModel)]="item.nombre" name="nombre" 
+                     required placeholder="Ej: Laptop HP">
+            </div>
+
+            <div class="mb-3">
+              <label for="categoria" class="form-label">Categoría *</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="categoria" 
+                       [(ngModel)]="item.categoria" name="categoria" 
+                       required placeholder="Ej: Tecnología">
+                <button type="button" class="btn btn-outline-info" 
+                        (click)="autoClassify()" 
+                        [disabled]="isClassifying">
+                  <i class="fas fa-robot"></i> 
+                  {{ isClassifying ? 'Clasificando...' : 'Clasificar con IA' }}
+                </button>
+              </div>
+              <div class="form-text">
+                🤖 La IA sugerirá automáticamente la categoría basada en el nombre y descripción
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="cantidad" class="form-label">Cantidad *</label>
+              <input type="number" class="form-control" id="cantidad" 
+                     [(ngModel)]="item.cantidad" name="cantidad" 
+                     min="0" required placeholder="Ej: 10">
+            </div>
+
+            <div class="mb-4">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea class="form-control" id="descripcion" 
+                        [(ngModel)]="item.descripcion" name="descripcion" 
+                        rows="4" placeholder="Descripción detallada del producto..."></textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-success flex-fill">
+                <i class="fas fa-save me-2"></i>
+                {{ isEdit ? 'Actualizar Producto' : 'Guardar Producto' }}
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="cancel()">
+                <i class="fas fa-times me-2"></i>Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

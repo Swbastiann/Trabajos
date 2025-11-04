@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <i class="fas fa-boxes me-2"></i>
+      Sistema de Inventario
+    </a>
+    
+    <div class="navbar-nav ms-auto">
+      <a class="nav-link" routerLink="/ai-dashboard">
+        <i class="fas fa-robot me-1"></i> Dashboard IA
+      </a>
+      <a class="nav-link" routerLink="/new">
+        <i class="fas fa-plus me-1"></i> Nuevo Producto
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="container-fluid">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="bg-light mt-5 py-3 border-top">
+  <div class="container text-center">
+    <small class="text-muted">
+      Sistema de Inventario &copy; 2024 | 
+      Frontend: Angular | Backend: NestJS | Database: SQLite | 🤖 IA Integrada
+    </small>
+  </div>
+</footer>

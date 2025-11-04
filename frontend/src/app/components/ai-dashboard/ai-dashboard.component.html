@@ -1,0 +1,104 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+      <i class="fas fa-robot me-2"></i>Dashboard de IA
+    </h1>
+    <a routerLink="/" class="btn btn-outline-primary">
+      <i class="fas fa-arrow-left me-2"></i>Volver a Inventario
+    </a>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Analizando inventario con IA...</p>
+  </div>
+
+  <div *ngIf="!loading">
+    <!-- Análisis General -->
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">
+              <i class="fas fa-chart-line me-2"></i>Análisis General del Inventario
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row text-center">
+              <div class="col-md-3">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3>{{ analysis.totalProducts || 0 }}</h3>
+                    <p class="text-muted mb-0">Total Productos</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3>{{ analysis.totalStock || 0 }}</h3>
+                    <p class="text-muted mb-0">Stock Total</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3 class="text-warning">{{ analysis.lowStockItems || 0 }}</h3>
+                    <p class="text-muted mb-0">Stock Bajo</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h3 class="text-danger">{{ analysis.outOfStockItems || 0 }}</h3>
+                    <p class="text-muted mb-0">Agotados</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-3 p-3" [class]="getStatusCardClass(analysis.healthStatus)">
+              <h5>Estado del Inventario: <strong>{{ analysis.healthStatus || 'Cargando...' }}</strong></h5>
+              <p class="mb-0">{{ analysis.recommendation || 'Analizando...' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sugerencias de IA -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="card-title mb-0">
+              <i class="fas fa-lightbulb me-2"></i>Sugerencias de Reabastecimiento por IA
+            </h5>
+          </div>
+          <div class="card-body">
+            <div *ngIf="suggestions.length === 0" class="text-center py-4">
+              <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+              <h5 class="text-success">¡Excelente! No hay productos que requieran atención inmediata</h5>
+            </div>
+
+            <div *ngFor="let suggestion of suggestions" class="alert alert-dismissible fade show" 
+                 [class]="getAlertClass(suggestion.priority)">
+              <h6 class="alert-heading">
+                <i class="fas fa-box me-2"></i>{{ suggestion.item }}
+                <span class="badge" [class]="getPriorityClass(suggestion.priority)">
+                  {{ suggestion.priority }}
+                </span>
+              </h6>
+              <p class="mb-1">{{ suggestion.suggestion }}</p>
+              <p class="mb-0"><strong>Cantidad recomendada:</strong> {{ suggestion.recommendedQuantity }} unidades</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
