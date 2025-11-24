@@ -16,4 +16,7 @@ export class Item {
 
   @Column({ nullable: true })
   descripcion: string;
+
+  @Column({ nullable: true })
+  marca: string;
 }

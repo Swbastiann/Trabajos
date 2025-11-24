@@ -8,15 +8,22 @@
     </a>
   </div>
 
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
+  <!-- LOADING -->
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Analizando inventario con IA...</p>
     </div>
-    <p class="mt-2">Analizando inventario con IA...</p>
-  </div>
+  }
 
-  <div *ngIf="!loading">
-    <!-- Análisis General -->
+  <!-- CONTENIDO -->
+  @if (!loading) {
+
+    <!-- ===========================
+         ANÁLISIS GENERAL
+    ============================ -->
     <div class="row mb-4">
       <div class="col-md-12">
         <div class="card">
@@ -25,7 +32,9 @@
               <i class="fas fa-chart-line me-2"></i>Análisis General del Inventario
             </h5>
           </div>
+
           <div class="card-body">
+
             <div class="row text-center">
               <div class="col-md-3">
                 <div class="card bg-light">
@@ -35,6 +44,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-3">
                 <div class="card bg-light">
                   <div class="card-body">
@@ -43,6 +53,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-3">
                 <div class="card bg-light">
                   <div class="card-body">
@@ -51,6 +62,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-md-3">
                 <div class="card bg-light">
                   <div class="card-body">
@@ -60,45 +72,84 @@
                 </div>
               </div>
             </div>
-            
-            <div class="mt-3 p-3" [class]="getStatusCardClass(analysis.healthStatus)">
+
+            <div class="mt-3 p-3" [ngClass]="getStatusCardClass(analysis.healthStatus)">
               <h5>Estado del Inventario: <strong>{{ analysis.healthStatus || 'Cargando...' }}</strong></h5>
               <p class="mb-0">{{ analysis.recommendation || 'Analizando...' }}</p>
             </div>
+
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Sugerencias de IA -->
+    <!-- ===========================
+         SUGERENCIAS IA
+    ============================ -->
     <div class="row">
       <div class="col-md-12">
         <div class="card">
+
           <div class="card-header bg-warning text-dark">
             <h5 class="card-title mb-0">
               <i class="fas fa-lightbulb me-2"></i>Sugerencias de Reabastecimiento por IA
             </h5>
           </div>
-          <div class="card-body">
-            <div *ngIf="suggestions.length === 0" class="text-center py-4">
-              <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-              <h5 class="text-success">¡Excelente! No hay productos que requieran atención inmediata</h5>
-            </div>
 
-            <div *ngFor="let suggestion of suggestions" class="alert alert-dismissible fade show" 
-                 [class]="getAlertClass(suggestion.priority)">
-              <h6 class="alert-heading">
-                <i class="fas fa-box me-2"></i>{{ suggestion.item }}
-                <span class="badge" [class]="getPriorityClass(suggestion.priority)">
-                  {{ suggestion.priority }}
-                </span>
-              </h6>
-              <p class="mb-1">{{ suggestion.suggestion }}</p>
-              <p class="mb-0"><strong>Cantidad recomendada:</strong> {{ suggestion.recommendedQuantity }} unidades</p>
-            </div>
+          <div class="card-body">
+
+            <!-- Si no hay sugerencias -->
+            @if (suggestions.length === 0) {
+              <div class="text-center py-4">
+                <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                <h5 class="text-success">¡Excelente! No hay productos que requieran atención inmediata</h5>
+              </div>
+            }
+
+            <!-- Lista de sugerencias -->
+            @if (suggestions.length > 0) {
+              @for (sug of suggestions; track $index) {
+
+                <div class="card mb-3 shadow-sm border-start border-4"
+                    [ngClass]="{
+                      'border-danger': sug.priority === 'Alta',
+                      'border-warning': sug.priority === 'Media',
+                      'border-info': sug.priority === 'Baja'
+                    }">
+
+                  <div class="card-body">
+
+                    <h5 class="card-title">
+                      <i class="fas fa-box me-2"></i>{{ sug.item }}
+
+                      <span class="badge ms-2"
+                            [ngClass]="{
+                              'bg-danger': sug.priority === 'Alta',
+                              'bg-warning': sug.priority === 'Media',
+                              'bg-info': sug.priority === 'Baja'
+                            }">
+                        {{ sug.priority }}
+                      </span>
+                    </h5>
+
+                    <p><strong>Stock actual:</strong> {{ sug.currentStock }}</p>
+                    <p><strong>Recomendación:</strong> {{ sug.suggestion }}</p>
+                    <p><strong>Cantidad sugerida:</strong> {{ sug.recommendedQuantity }} unidades</p>
+
+                    <button class="btn btn-success btn-sm" (click)="confirmOrder(sug)">
+                      <i class="fas fa-check me-1"></i> Confirmar pedido
+                    </button>
+
+                  </div>
+                </div>
+
+              }
+            }
+
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+  }
 </div>

@@ -12,8 +12,9 @@ import { AIService } from '../../services/ai.service';
   templateUrl: './item-form.component.html'
 })
 export class ItemFormComponent implements OnInit {
-  item: Item = {
+    item: Item = {
     nombre: '',
+    marca: '',
     categoria: '',
     cantidad: 0,
     descripcion: ''
@@ -51,18 +52,20 @@ export class ItemFormComponent implements OnInit {
     });
   }
 
-  // NUEVA FUNCIÓN: Clasificación automática con IA
+  // Clasificación automática con IA
   autoClassify(): void {
-    if (!this.item.nombre && !this.item.descripcion) {
-      alert('Por favor ingresa al menos el nombre del producto para clasificación automática');
+    if (!this.item.nombre || !this.item.marca) {
+      alert('Por favor ingresa al menos el nombre y la marca del producto para clasificación automática');
       return;
     }
 
     this.isClassifying = true;
-    
-    this.aiService.classifyProduct(this.item.nombre, this.item.descripcion).subscribe({
-      next: (categoria) => {
-        this.item.categoria = categoria;
+
+    this.aiService.classifyProduct(this.item.nombre, this.item.marca).subscribe({
+      next: (res: string) => {
+        const [categoria, descripcion] = res.split('–').map(s => s.trim());
+        this.item.categoria = categoria || 'Sin categoría';
+        this.item.descripcion = descripcion || '';
         this.isClassifying = false;
       },
       error: (error) => {
@@ -73,6 +76,7 @@ export class ItemFormComponent implements OnInit {
     });
   }
 
+  // Guardar o actualizar producto
   onSubmit(): void {
     if (this.isEdit && this.itemId) {
       this.itemService.update(this.itemId, this.item).subscribe({
@@ -81,8 +85,9 @@ export class ItemFormComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error: (error) => {
-          console.error('Error actualizando producto:', error);
-          alert('Error al actualizar el producto');
+          const msg = error.error?.message || 'Error al actualizar el producto';
+          console.error('Error actualizando producto:', msg);
+          alert(msg);
         }
       });
     } else {
@@ -91,9 +96,11 @@ export class ItemFormComponent implements OnInit {
           alert('Producto agregado correctamente!');
           this.router.navigate(['/']);
         },
+        // ✅ Aquí está la modificación que pediste
         error: (error) => {
-          console.error('Error al agregar producto:', error);
-          alert('Error al agregar el producto');
+          const msg = error.error?.message || 'Error al agregar el producto';
+          console.error('Error al agregar producto:', msg);
+          alert(msg); // <-- muestra: "El producto X ya está registrado"
         }
       });
     }

@@ -11,13 +11,23 @@
         </div>
         <div class="card-body">
           <form (ngSubmit)="onSubmit()">
+            <!-- Nombre del Producto -->
             <div class="mb-3">
               <label for="nombre" class="form-label">Nombre del Producto *</label>
               <input type="text" class="form-control" id="nombre" 
                      [(ngModel)]="item.nombre" name="nombre" 
-                     required placeholder="Ej: Laptop HP">
+                     required placeholder="Ej: Laptop">
             </div>
 
+            <!-- Marca del Producto -->
+            <div class="mb-3">
+              <label for="marca" class="form-label">Marca *</label>
+              <input type="text" class="form-control" id="marca" 
+                     [(ngModel)]="item.marca" name="marca" 
+                     required placeholder="Ej: HP">
+            </div>
+
+            <!-- Categoría con IA -->
             <div class="mb-3">
               <label for="categoria" class="form-label">Categoría *</label>
               <div class="input-group">
@@ -32,10 +42,11 @@
                 </button>
               </div>
               <div class="form-text">
-                🤖 La IA sugerirá automáticamente la categoría basada en el nombre y descripción
+                🤖 La IA sugerirá automáticamente la categoría y descripción basada en el nombre y la marca. Puedes editar la descripción si lo deseas.
               </div>
             </div>
 
+            <!-- Cantidad -->
             <div class="mb-3">
               <label for="cantidad" class="form-label">Cantidad *</label>
               <input type="number" class="form-control" id="cantidad" 
@@ -43,6 +54,7 @@
                      min="0" required placeholder="Ej: 10">
             </div>
 
+            <!-- Descripción -->
             <div class="mb-4">
               <label for="descripcion" class="form-label">Descripción</label>
               <textarea class="form-control" id="descripcion" 
@@ -50,6 +62,7 @@
                         rows="4" placeholder="Descripción detallada del producto..."></textarea>
             </div>
 
+            <!-- Botones -->
             <div class="d-flex gap-2">
               <button type="submit" class="btn btn-success flex-fill">
                 <i class="fas fa-save me-2"></i>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 export interface Item {
   id?: number;
   nombre: string;
+  marca: string;
   categoria: string;
   cantidad: number;
   descripcion: string;
@@ -14,7 +15,7 @@ export interface Item {
   providedIn: 'root'
 })
 export class ItemService {
-  private apiUrl = 'http://localhost:3000/items';
+  private apiUrl = 'http://localhost:3000/api/items';
 
   constructor(private http: HttpClient) { }
 

@@ -19,7 +19,7 @@ export class ItemController {
   }
 
   @Post()
-  @ApiBody({ type: CreateItemDto }) // 👈 Esto le dice a Swagger qué mostrar
+  @ApiBody({ type: CreateItemDto })
   create(@Body() createItemDto: CreateItemDto) {
     return this.itemService.create(createItemDto);
   }
@@ -36,10 +36,8 @@ export class ItemController {
   }
 
   @Post('suggest-category')
-@ApiBody({ type: CreateItemDto }) // Reutilizamos el DTO de creación para tener nombre y descripción
-suggestCategory(@Body() createItemDto: CreateItemDto) {
-  return this.itemService.suggestCategory(createItemDto);
+  @ApiBody({ type: CreateItemDto })
+  suggestCategory(@Body() createItemDto: CreateItemDto) {
+    return this.itemService.suggestCategory(createItemDto);
+  }
 }
-
-}
-

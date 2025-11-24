@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Item } from './item.entity';
@@ -19,9 +19,21 @@ export class ItemService {
     return await this.itemRepository.findOne({ where: { id } });
   }
 
-  async create(createItemDto: CreateItemDto): Promise<Item> {
-    const newItem = this.itemRepository.create(createItemDto);
-    return await this.itemRepository.save(newItem);
+  async create(itemData: CreateItemDto) {
+  // 🔍 Verificar si ya existe un producto con el mismo nombre y marca
+    const existing = await this.itemRepository.findOne({
+      where: { nombre: itemData.nombre, marca: itemData.marca }
+    });
+
+    if (existing) {
+      throw new BadRequestException(
+        `El producto "${itemData.nombre}" de marca "${itemData.marca}" ya está registrado.`
+      );
+    }
+
+    // Guardar si no existe
+    const newItem = this.itemRepository.create(itemData);
+    return this.itemRepository.save(newItem);
   }
   
   async update(id: number, updateItemDto: UpdateItemDto): Promise<Item | null> {

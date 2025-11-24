@@ -12,6 +12,9 @@ export class CreateItemDto {
 
   @ApiProperty({ example: 'Computador portátil HP', description: 'Descripción del ítem' })
   descripcion: string;
+
+  @ApiProperty()
+  marca: string;
 }
 
 export class UpdateItemDto extends CreateItemDto {}

@@ -8,32 +8,21 @@ import { Item } from './item.service';
 })
 export class AIService {
 
+  private API_URL = 'http://localhost:3000/api/ai';
+
   constructor(private http: HttpClient) { }
 
-  // 1. CLASIFICACIÓN AUTOMÁTICA DE PRODUCTOS
-  classifyProduct(nombre: string, descripcion: string): Observable<string> {
-    // En un entorno real, aquí conectarías con una API de IA como OpenAI
-    // Por ahora simulamos una clasificación inteligente
-    
-    const texto = (nombre + ' ' + descripcion).toLowerCase();
-    
-    // Reglas simples de clasificación (en producción usarías ML real)
-    if (texto.includes('laptop') || texto.includes('computador') || texto.includes('tablet') || texto.includes('teclado') || texto.includes('mouse')) {
-      return of('Tecnología');
-    } else if (texto.includes('jabon') || texto.includes('shampoo') || texto.includes('cepillo') || texto.includes('pasta')) {
-      return of('Higiene Personal');
-    } else if (texto.includes('mesa') || texto.includes('silla') || texto.includes('escritorio') || texto.includes('mueble')) {
-      return of('Muebles');
-    } else if (texto.includes('comida') || texto.includes('arroz') || texto.includes('leche') || texto.includes('pan')) {
-      return of('Alimentos');
-    } else if (texto.includes('libro') || texto.includes('cuaderno') || texto.includes('lapiz') || texto.includes('papel')) {
-      return of('Papelería');
-    } else {
-      return of('Otros');
-    }
+  // 1. CLASIFICACIÓN AUTOMÁTICA DE PRODUCTOS (🔥 ahora usando IA real en el backend)
+  classifyProduct(nombre: string, marca: string): Observable<string> {
+  const body = { nombre, marca };
+  return this.http.post(
+    `${this.API_URL}/classify-product`,
+    body,
+    { responseType: 'text' } // <--- muy importante
+  );
   }
 
-  // 2. SUGERENCIAS DE REABASTECIMIENTO
+  // 2. SUGERENCIAS DE REABASTECIMIENTO (simulado, por ahora)
   getRestockSuggestions(items: Item[]): Observable<any[]> {
     const suggestions = [];
     
@@ -65,14 +54,13 @@ export class AIService {
     return of(suggestions);
   }
 
-  // 3. ANÁLISIS PREDICTIVO (Simulado)
+  // 3. ANÁLISIS PREDICTIVO (simulado, por ahora)
   getInventoryAnalysis(items: Item[]): Observable<any> {
     const totalItems = items.length;
     const totalStock = items.reduce((sum, item) => sum + item.cantidad, 0);
     const lowStockItems = items.filter(item => item.cantidad <= 5).length;
     const outOfStockItems = items.filter(item => item.cantidad === 0).length;
     
-    // Análisis simple
     let healthStatus = 'Excelente';
     if (outOfStockItems > 0) healthStatus = 'Crítico';
     else if (lowStockItems > totalItems * 0.3) healthStatus = 'Precaución';
